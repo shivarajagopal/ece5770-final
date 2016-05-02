@@ -28,6 +28,7 @@ int ACsearch( char text[13], int textLength ) {
             if (out[currentState] & (1 << j)) { // Matched keywords[j]
             	if (!matched) {
 								firstMatch= j;
+								matched = 1;
 							}
             }
         }

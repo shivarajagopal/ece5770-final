@@ -43,8 +43,6 @@ int main(int argc, char *argv[])
  
   timer.stop();
 
-  //classification = classifySound(nn, result);
-  //std::cout << "classification: " << classification << "\n";
   return 0;
 }
 
