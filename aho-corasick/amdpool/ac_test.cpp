@@ -11,29 +11,30 @@
 #include <stdexcept>
 #include "ac.h"
 #include "timer.h"
-
 using namespace std;
 //------------------------------------------------------------------------
 // Aho-Corasick testbench
 //------------------------------------------------------------------------
+hls::stream<char> ac_in;
+hls::stream<int>  ac_out;
 
-string hex_to_string(const string& input)
+std::string hex_to_string(const std::string& input)
 {
 	static const char* const lut = "0123456789ABCDEF";
 	size_t len = input.length();
-	if (len & 1) throw invalid_argument("odd length");
+	if (len & 1) throw std::invalid_argument("odd length");
 	
-	string output;
+	std::string output;
 	output.reserve(len / 2);
 	for (size_t i = 0; i < len; i += 2)
 	{
 		char a = input[i];
-		const char* p = lower_bound(lut, lut + 16, a);
-		if (*p != a) throw invalid_argument("not a hex digit");
+		const char* p = std::lower_bound(lut, lut + 16, a);
+		if (*p != a) throw std::invalid_argument("not a hex digit");
 		
 		char b = input[i + 1];
-		const char* q = lower_bound(lut, lut + 16, b);
-		if (*q != b) throw invalid_argument("not a hex digit");
+		const char* q = std::lower_bound(lut, lut + 16, b);
+		if (*q != b) throw std::invalid_argument("not a hex digit");
 		
 		output.push_back(((p - lut) << 4) | (q - lut));
 	}
@@ -45,12 +46,16 @@ void callSearch (char* array, int length) {
 	int matched = -1;
 	for (i = 0; i < length; i++) {
 		if (i == 0) {
-			matched = ACsearch(array[i], 1);
+			ac_in.write(array[i]);
+			ac_in.write((char) 1 );
 		} else { 
-			matched = ACsearch(array[i], 0);
+			ac_in.write(array[i]);
+			ac_in.write((char) 0 );
 		}
+		dut ( ac_in, ac_out );
+		matched = ac_out.read();
 		if (matched != -1) {
-			cout << "Actual: "<< matched << endl;
+			std::cout << "Recognized String "<< matched << std::endl;
 			break;
 		}
 	}
@@ -60,7 +65,7 @@ void callSearch (char* array, int length) {
 int main(int argc, char *argv[]) 
 {
   int matched, i;
-
+	
 	char str1[13] = "asdkweoijloh";
 	char str2[13] = "hesdlfjasklj";
 	char str3[13] = "sheksladjfkl";

@@ -21,7 +21,7 @@ int findNextState(int currentState, char nextInput) {
 }
 
 int ACsearch( char character, char reset ) { //char text[13], int textLength ) {
-    static int currentState = 0;
+		static int currentState = 0;
 		if (reset) currentState = 0;
 		int firstMatch = -1;
 		char matched = 0;
@@ -38,3 +38,20 @@ int ACsearch( char character, char reset ) { //char text[13], int textLength ) {
 		return firstMatch;
 }
 
+void dut(
+		hls::stream<char> &strm_in,
+		hls::stream<int> &strm_out
+)
+{
+	char in_char;
+	char reset;
+	int  match_found;
+	
+	in_char = strm_in.read();
+	reset = strm_in.read();
+	//cout << "char: " << in_char << " reset: " << reset << endl;
+
+	match_found = ACsearch(in_char, reset);
+	//cout << "Match found: " << match_found << endl;	
+	strm_out.write( match_found );
+}
