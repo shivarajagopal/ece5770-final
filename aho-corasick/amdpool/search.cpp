@@ -1,5 +1,8 @@
+#include <iostream>
+
 #include "arrays.h"
 #include "ac.h"
+using namespace std;
 // Finds the next state the machine will transition to.
 //
 // currentState - The current state of the machine. Must be between
@@ -17,24 +20,21 @@ int findNextState(int currentState, char nextInput) {
     return g[answer][c];
 }
 
-int ACsearch( char text[13], int textLength ) {
-    int currentState = 0;
+int ACsearch( char character, char reset ) { //char text[13], int textLength ) {
+    static int currentState = 0;
+		if (reset) currentState = 0;
 		int firstMatch = -1;
 		char matched = 0;
-    for (int i = 0; i < textLength; ++i) {
-        currentState = findNextState(currentState, text[i]);
-        if (out[currentState] == 0) continue; // Nothing new, let's move on to the next character.
-        for (int j = 0; j < terms; ++j) {
-            if (out[currentState] & (1 << j)) { // Matched keywords[j]
-            	if (!matched) {
-								firstMatch= j;
-								matched = 1;
-							}
-            }
-        }
-    }
+		currentState = findNextState(currentState, character);
+		if (out[currentState] == 0) return firstMatch;
+		for (int j = 0; j < terms; ++j) {
+			if (out[currentState] & (1 << j)) { // Matched keywords[j]
+				if (!matched) {
+					firstMatch= j;
+					matched = 1;
+				}
+      }
+		}
 		return firstMatch;
-
-
 }
 

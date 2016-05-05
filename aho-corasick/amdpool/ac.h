@@ -6,6 +6,6 @@
 #ifndef AC_H
 #define AC_H
 
-int ACsearch(char* text, int textLength);
+int ACsearch(char character, char reset );//* text, int textLength);
 
 #endif

@@ -4,12 +4,14 @@ using namespace std;
 #include <cstring>
 #include <vector>
 #include <queue>
+#include <algorithm>
+#include <stdexcept>
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // Aho-Corasick's algorithm, as explained in  http://dx.doi.org/10.1145/360825.360855  //
 /////////////////////////////////////////////////////////////////////////////////////////
 
-const int MAXS = 16;    // Max number of states in the matching machine.
+const int MAXS = 25;    // Max number of states in the matching machine.
                         // Should be equal to the sum of the length of all keywords.
 
 const int MAXC = 255; // Number of characters in the alphabet.
@@ -36,7 +38,7 @@ int g[MAXS][MAXC]; // Goto function, or -1 if fail.
 // Returns the number of states that the new machine has. 
 // States are numbered 0 up to the return value - 1, inclusive.
 int buildMatchingMachine(const vector<string> &words) {
-    memset(out, 0, sizeof out);
+		memset(out, 0, sizeof out);
     memset(f, -1, sizeof f);
     memset(g, -1, sizeof g);
     
@@ -93,7 +95,7 @@ int buildMatchingMachine(const vector<string> &words) {
 
 
 // Print out the 3 arrays necessary to a file.
-void outputArrays() {
+void outputArrays(int MAXS) {
     std::ofstream savefile("arrays.h");
     savefile << "int g[" << MAXS << "][" << MAXC << "] = {\n";
     for (int i = 0; i < MAXS-1; i++) {
@@ -126,22 +128,51 @@ void outputArrays() {
     savefile.close();
 }
 
+string hex_to_string(const string& input)
+{
+	  static const char* const lut = "0123456789ABCDEF";
+		size_t len = input.length();
+		if (len & 1) throw invalid_argument("odd length");
+    string output;
+    output.reserve(len / 2);
+    for (size_t i = 0; i < len; i += 2)  {
+			char a = input[i];
+			const char* p = lower_bound(lut, lut + 16, a);
+			if (*p != a) throw invalid_argument("not a hex digit");
+			char b = input[i + 1];
+			const char* q = lower_bound(lut, lut + 16, b);
+			if (*q != b) throw invalid_argument("not a hex digit");
+			output.push_back(((p - lut) << 4) | (q - lut));
+		}
+    return output;
+}
+
 // Build the AC matching machine from the given words
-// TODO: Make this a 2D array-based system
-void ACbuild() {
+int ACbuild() {
     vector<string> keywords;
-    keywords.push_back("he");
+    int totalLength = 0;
+		string inHex = "6B3C240B60030C246A";
+	  keywords.push_back(hex_to_string(inHex));
+		keywords.push_back("he");
     keywords.push_back("she");
     keywords.push_back("hers");
     keywords.push_back("his");
     keywords.push_back("asdk");
-    numTerms = keywords.size();
+		for(int i=0; i < keywords.size(); i++){
+			totalLength += keywords[i].length();
+		}
+    if (totalLength != MAXS) {
+			cout << "Please reset MAXS to " << totalLength << endl;
+			return 1;
+		}
+		numTerms = keywords.size();
     buildMatchingMachine(keywords);
-    outputArrays();
+    outputArrays(totalLength);
+		return 0;
 }
 
 int main(){
-	ACbuild();
-	return 0;
+	int result = ACbuild();
+	return result;
 }
 
