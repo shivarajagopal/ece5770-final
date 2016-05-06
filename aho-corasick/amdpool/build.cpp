@@ -11,14 +11,16 @@ using namespace std;
 // Aho-Corasick's algorithm, as explained in  http://dx.doi.org/10.1145/360825.360855  //
 /////////////////////////////////////////////////////////////////////////////////////////
 
-const int MAXS = 25;    // Max number of states in the matching machine.
+const int MAXS = 1122;    // Max number of states in the matching machine.
                         // Should be equal to the sum of the length of all keywords.
 
 const int MAXC = 255; // Number of characters in the alphabet.
 
+const int TERMS = 58;
+
 int numTerms;
 
-int out[MAXS]; // Output for each state, as a bitwise mask.
+char out[MAXS][TERMS]; // Output for each state, as a bitwise mask.
                // Bit i in this mask is on if the keyword with index i appears when the
                // machine enters this state.
 
@@ -43,7 +45,7 @@ int buildMatchingMachine(const vector<string> &words) {
     memset(g, -1, sizeof g);
     
     int states = 1; // Initially, we just have the 0 state
-        
+    int j;    
     for (int i = 0; i < words.size(); ++i) {
         const string &keyword = words[i];
         int currentState = 0;
@@ -54,7 +56,7 @@ int buildMatchingMachine(const vector<string> &words) {
             }
             currentState = g[currentState][c];
         }
-        out[currentState] |= (1 << i); // There's a match of keywords[i] at node currentState.
+        out[currentState][i] = 1; // There's a match of keywords[i] at node currentState.
     }
     
     // State 0 should have an outgoing edge for all characters.
@@ -84,7 +86,9 @@ int buildMatchingMachine(const vector<string> &words) {
                 }
                 failure = g[failure][c];
                 f[g[state][c]] = failure;
-                out[g[state][c]] |= out[failure]; // Merge out values
+								for (j = 0 ; j < TERMS ; ++j ) {
+									if (out[failure][j]) out[g[state][c]][j] = 1;
+								}
                 q.push(g[state][c]);
             }
         }
@@ -95,7 +99,7 @@ int buildMatchingMachine(const vector<string> &words) {
 
 
 // Print out the 3 arrays necessary to a file.
-void outputArrays(int MAXS) {
+void outputArrays() {
     std::ofstream savefile("arrays.h");
     savefile << "int g[" << MAXS << "][" << MAXC << "] = {\n";
     for (int i = 0; i < MAXS-1; i++) {
@@ -118,11 +122,20 @@ void outputArrays(int MAXS) {
     }
     savefile << f[MAXS-1] << "\n};\n\n";
 
-    savefile << "int out[" << MAXS << "] = {\n\t";
+    savefile << "char out[" << MAXS << "][" << TERMS << "] = {\n";
     for (int i = 0; i < MAXS-1; i++) {
-        savefile << out[i] << ", ";
+				savefile << "\t{";
+				for (int j=0; j < TERMS-1; j++) {
+						savefile << +out[i][j] << ", ";
+				}
+        savefile << +out[i][TERMS-1] << "},\n";
     }
-    savefile << out[MAXS-1] << "\n};\n\n";
+
+		savefile << "\t{";
+		for (int j=0; j < TERMS-1; j++) {
+			savefile << +out[MAXS-1][j] << ", ";
+		}
+    savefile << +out[MAXS-1][TERMS-1] << "}\n};\n\n";
 
     savefile << "const int terms = " << numTerms << ";\n\n";
     savefile.close();
@@ -151,13 +164,15 @@ string hex_to_string(const string& input)
 int ACbuild() {
     vector<string> keywords;
     int totalLength = 0;
-		string inHex = "6B3C240B60030C246A";
-	  keywords.push_back(hex_to_string(inHex));
-		keywords.push_back("he");
-    keywords.push_back("she");
-    keywords.push_back("hers");
-    keywords.push_back("his");
-    keywords.push_back("asdk");
+		std::ifstream file("shellcode.txt");
+		std::string str;
+		while(std::getline(file, str)) {
+			keywords.push_back(str);
+		}
+		std::ifstream hexFile("shellcodeHex.txt");
+		while(std::getline(hexFile, str)) {
+			keywords.push_back(hex_to_string(str));
+		}
 		for(int i=0; i < keywords.size(); i++){
 			totalLength += keywords[i].length();
 		}
@@ -167,7 +182,7 @@ int ACbuild() {
 		}
 		numTerms = keywords.size();
     buildMatchingMachine(keywords);
-    outputArrays(totalLength);
+    outputArrays();
 		return 0;
 }
 

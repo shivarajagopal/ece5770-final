@@ -26,9 +26,12 @@ int ACsearch( char character, char reset ) { //char text[13], int textLength ) {
 		int firstMatch = -1;
 		char matched = 0;
 		currentState = findNextState(currentState, character);
-		if (out[currentState] == 0) return firstMatch;
+		//cout << "curState: " << currentState << endl;
+		
+		//if (out[currentState] == 0) return firstMatch;
+		//cout << "out["<<currentState<<"] = " << out[currentState] <<endl;
 		for (int j = 0; j < terms; ++j) {
-			if (out[currentState] & (1 << j)) { // Matched keywords[j]
+			if (out[currentState][j]) { // Matched keywords[j]
 				if (!matched) {
 					firstMatch= j;
 					matched = 1;
@@ -40,6 +43,7 @@ int ACsearch( char character, char reset ) { //char text[13], int textLength ) {
 
 void dut(
 		hls::stream<char> &strm_in,
+		hls::stream<char> &reset_in,
 		hls::stream<int> &strm_out
 )
 {
@@ -48,8 +52,8 @@ void dut(
 	int  match_found;
 	
 	in_char = strm_in.read();
-	reset = strm_in.read();
-	//cout << "char: " << in_char << " reset: " << reset << endl;
+	reset = reset_in.read();
+	//cout << "char: " << in_char << " reset: " << (int)reset << endl;
 
 	match_found = ACsearch(in_char, reset);
 	//cout << "Match found: " << match_found << endl;	

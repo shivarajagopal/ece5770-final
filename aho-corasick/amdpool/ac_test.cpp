@@ -16,6 +16,7 @@ using namespace std;
 // Aho-Corasick testbench
 //------------------------------------------------------------------------
 hls::stream<char> ac_in;
+hls::stream<char> reset_in;
 hls::stream<int>  ac_out;
 
 std::string hex_to_string(const std::string& input)
@@ -47,18 +48,20 @@ void callSearch (char* array, int length) {
 	for (i = 0; i < length; i++) {
 		if (i == 0) {
 			ac_in.write(array[i]);
-			ac_in.write((char) 1 );
+			reset_in.write( 0x01 );
 		} else { 
 			ac_in.write(array[i]);
-			ac_in.write((char) 0 );
+			reset_in.write( 0x00 );
 		}
-		dut ( ac_in, ac_out );
+		dut ( ac_in, reset_in, ac_out );
 		matched = ac_out.read();
 		if (matched != -1) {
 			std::cout << "Recognized String "<< matched << std::endl;
 			break;
 		}
 	}
+	std::cout << "No matches found!!" << std::endl;
+
 }
 
 
@@ -69,8 +72,8 @@ int main(int argc, char *argv[])
 	char str1[13] = "asdkweoijloh";
 	char str2[13] = "hesdlfjasklj";
 	char str3[13] = "sheksladjfkl";
-	char str4[13] = "dfdsherssdfs";
-	char str5[13] = "sdlafjlkshis";
+	char str4[15] = "asefjshellcode";
+	char str5[36] = "RERERERERERERERERERERERERERERERERas";
 	char str6[13] = {0x6B, 0x3C, 0x24, 0x0B, 0x60, 0x03, 0x0C, 0x24, 0x6A, 0x65, 0x87, 0x12, '\0'};
   // Timer
   Timer timer("aho-corasick");
@@ -80,8 +83,8 @@ int main(int argc, char *argv[])
 	callSearch(str1, 13);
 	callSearch(str2, 13);
 	callSearch(str3, 13);
-	callSearch(str4, 13);
-	callSearch(str5, 13);
+	callSearch(str4, 15);
+	callSearch(str5, 36);
 	callSearch(str6, 13);
   
 	
