@@ -16,7 +16,15 @@ using namespace std;
 int findNextState(int currentState, char nextInput) {
     int answer = currentState;
     int c = nextInput;
-    while (g[answer][c] == -1) answer = f[answer];
+		int i;
+	 	for (i=0; i < 5; ++i) {
+			if (g[answer][c] == -1)
+				answer = f[answer];
+		}
+		/*while (g[answer][c] == -1){
+		 	answer = f[answer];
+		}
+		cout << "max: " << max << endl;*/
     return g[answer][c];
 }
 

@@ -16,7 +16,7 @@ CFLAGS = -g -I${VHLS_INC}
 
 all: csim
 
-csim: builder search
+csim: clean builder search
 	@echo "Simulating searcher on amdpool"
 	./search
 

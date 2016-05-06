@@ -11,12 +11,12 @@ using namespace std;
 // Aho-Corasick's algorithm, as explained in  http://dx.doi.org/10.1145/360825.360855  //
 /////////////////////////////////////////////////////////////////////////////////////////
 
-const int MAXS = 8361;    // Max number of states in the matching machine.
+const int MAXS = 1305;    // Max number of states in the matching machine.
                         // Should be equal to the sum of the length of all keywords.
 
 const int MAXC = 255; // Number of characters in the alphabet.
 
-const int TERMS = 273;
+const int TERMS = 93;
 
 int numTerms;
 
