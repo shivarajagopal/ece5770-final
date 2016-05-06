@@ -11,12 +11,12 @@ using namespace std;
 // Aho-Corasick's algorithm, as explained in  http://dx.doi.org/10.1145/360825.360855  //
 /////////////////////////////////////////////////////////////////////////////////////////
 
-const int MAXS = 1122;    // Max number of states in the matching machine.
+const int MAXS = 8361;    // Max number of states in the matching machine.
                         // Should be equal to the sum of the length of all keywords.
 
 const int MAXC = 255; // Number of characters in the alphabet.
 
-const int TERMS = 58;
+const int TERMS = 273;
 
 int numTerms;
 
@@ -31,7 +31,7 @@ int g[MAXS][MAXC]; // Goto function, or -1 if fail.
 // Builds the string matching machine.
 // 
 // words - Vector of keywords. The index of each keyword is important:
-//         "out[state] & (1 << i)" is > 0 if we just found word[i] in the text.
+//         "out[state][i]" is 1 if we just found word[i] in the text.
 // lowestChar - The lowest char in the alphabet. Defaults to 'a'.
 // highestChar - The highest char in the alphabet. Defaults to 'z'.
 //               "highestChar - lowestChar" must be <= MAXC, otherwise we will
@@ -100,7 +100,10 @@ int buildMatchingMachine(const vector<string> &words) {
 
 // Print out the 3 arrays necessary to a file.
 void outputArrays() {
-    std::ofstream savefile("arrays.h");
+		// Open file
+		std::ofstream savefile("arrays.h");
+
+		// Output g
     savefile << "int g[" << MAXS << "][" << MAXC << "] = {\n";
     for (int i = 0; i < MAXS-1; i++) {
         savefile << "\t{";
@@ -116,12 +119,14 @@ void outputArrays() {
     }
     savefile << g[MAXS-1][MAXC-1] << "}\n};\n\n";
 
+		// Output f
     savefile << "int f[" << MAXS << "] = {\n\t";
     for (int i = 0; i < MAXS-1; i++) {
         savefile << f[i] << ", ";
     }
     savefile << f[MAXS-1] << "\n};\n\n";
 
+		// Output out
     savefile << "char out[" << MAXS << "][" << TERMS << "] = {\n";
     for (int i = 0; i < MAXS-1; i++) {
 				savefile << "\t{";
@@ -136,9 +141,13 @@ void outputArrays() {
 			savefile << +out[MAXS-1][j] << ", ";
 		}
     savefile << +out[MAXS-1][TERMS-1] << "}\n};\n\n";
-
+		
+		// Output number of terms
     savefile << "const int terms = " << numTerms << ";\n\n";
+
+		// Close file
     savefile.close();
+
 }
 
 string hex_to_string(const string& input)
@@ -176,11 +185,17 @@ int ACbuild() {
 		for(int i=0; i < keywords.size(); i++){
 			totalLength += keywords[i].length();
 		}
+		char earlyExit = 0;
     if (totalLength != MAXS) {
-			cout << "Please reset MAXS to " << totalLength << endl;
-			return 1;
+			cout << "Please set MAXS to " << totalLength << endl;
+			earlyExit = 1;
 		}
 		numTerms = keywords.size();
+		if (numTerms != TERMS) {
+			cout << "Please set TERMS to " << numTerms << endl;
+			earlyExit = 1;
+		}
+		if (earlyExit) return earlyExit;
     buildMatchingMachine(keywords);
     outputArrays();
 		return 0;
