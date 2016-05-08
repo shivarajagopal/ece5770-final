@@ -27,7 +27,7 @@ bitstream:
 
 clean:
 	rm -rf build search *.dat *.prj *.log
-	rm -rf zedboard_project* xillydemo.bit
+	rm -rf zedboard_project/ xillydemo.bit
 
 builder: build.cpp
 	@echo "Compiling builder and rebuilding state machine..."

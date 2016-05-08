@@ -6,7 +6,7 @@
 
 # This points to the common directory where all the
 # Xillybus files are stored
-XILLYBUS_TAR="/classes/ece5775/zedboard/zedboard_project.tgz"
+XILLYBUS_TAR="zedboard_project.tgz"
 WORKDIR="./zedboard_project"
 
 # HLS generated verilog files directory
@@ -39,7 +39,6 @@ fi
 # copy xillybus files if they are not already there
 if [ ! -d $WORKDIR ]; then
   printf "Copying zedboard files to current directory.\n"
-  cp -r $XILLYBUS_TAR .
   tar -xzf $XILLYBUS_TAR
   if [ ! -d $WORKDIR ]; then
     printf "Error after extracting zedboard files.\n"
