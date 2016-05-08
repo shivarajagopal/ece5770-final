@@ -13,7 +13,7 @@ open_project ${hls_prj} -reset
 set_top dut
 
 # Add design and testbench files
-add_files BM.cpp
+add_files search.cpp
 add_files -tb BM_test.cpp
 
 open_solution "solution1"

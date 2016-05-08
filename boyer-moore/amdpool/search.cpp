@@ -22,7 +22,6 @@ int BMsearch(char y[INPUTSIZE]) {
    while (j <= n - m) {
       for (i = m - 1; i >= 0 && x[i] == y[i + j]; --i);
       if (i < 0) {
-         printf("%d\n", j);
          return j;
          j += bmGs[0];
       }
@@ -44,10 +43,6 @@ void dut(
 	if (i < 255) {
 		match_found = -1;
 	} else {
-	  for (j=0; j < 256 ; j++) {
-			printf("%c", y[j]);
-		}
-		printf("\n");
 		cout << "running BM..." << endl;
 		match_found = BMsearch(y);
 		i=0;

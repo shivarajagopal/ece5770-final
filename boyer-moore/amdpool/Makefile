@@ -16,7 +16,7 @@ CFLAGS = -g -I${VHLS_INC}
 
 all: csim
 
-csim: clean search
+csim: clean build search
 	@echo "Simulating searcher on amdpool"
 	./search
 
@@ -26,7 +26,7 @@ bitstream:
 	./run_bitstream.sh
 
 clean:
-	rm -rf search *.dat *.prj *.log
+	rm -rf build search *.dat *.prj *.log
 	rm -rf zedboard_project/ xillydemo.bit
 
 build: build.cpp
@@ -37,13 +37,8 @@ build: build.cpp
 search: search.cpp BM_test.cpp
 	@echo "Compiling searcher..."
 	g++ ${CFLAGS} $^ -o search
-	./search
 
 HLS: csim
 	@echo "Compiling and simulating using Vivado HLS"
 	vivado_hls run.tcl
 
-old: BM.cpp
-	@echo "Compiling old version"
-	g++ ${CFLAGS} $^ -o old
-	./old
