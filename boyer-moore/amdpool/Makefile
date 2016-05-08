@@ -29,9 +29,15 @@ clean:
 	rm -rf search *.dat *.prj *.log
 	rm -rf zedboard_project/ xillydemo.bit
 
-search: BM.cpp BM_test.cpp
+build: build.cpp
+	@echo "Compiling and building state machines"
+	g++ ${CFLAGS} $^ -o build
+	./build
+
+search: search.cpp BM_test.cpp
 	@echo "Compiling searcher..."
 	g++ ${CFLAGS} $^ -o search
+	./search
 
 HLS: csim
 	@echo "Compiling and simulating using Vivado HLS"

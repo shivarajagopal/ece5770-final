@@ -48,12 +48,13 @@ void callSearch (char* array, int length) {
 		ac_in.write(array[i]);
 		dut ( ac_in, ac_out );
 		matched = ac_out.read();
-		//std::cout << "matched: " << matched << endl;
 	}
 	if (matched != -1) {
-			std::cout << "Recognized String "<< matched << std::endl;
+		cout << "Matched at Location "<< matched << endl;
 	}
-	std::cout << "No matches found!!" << std::endl;
+	else {
+		cout << "No matches found!!" << endl;
+	}
 
 }
 
@@ -73,7 +74,7 @@ char str4[256] = "iywefbevhliweybfvioweyblvyewvfileyvseorigybeioybgwebtyweuietys
   timer.start();
 	
 	
-	callSearch(str4, 256);
+	callSearch(str4, 255);
 	/*
 	callSearch(str2, 13);
 	callSearch(str3, 13);

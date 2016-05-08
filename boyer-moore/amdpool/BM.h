@@ -9,7 +9,7 @@
 #include<hls_stream.h>
 
 void dut(
-    hls::stream<char> &strm_in,
+  hls::stream<char> &strm_in,
 	hls::stream<int>  &strm_out
 );
 

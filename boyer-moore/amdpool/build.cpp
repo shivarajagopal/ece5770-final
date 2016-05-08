@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <iostream>
-#include "BM.h"
+#include <fstream>
 #include "terms.h"
 #define ASIZE 256
 
@@ -78,7 +78,7 @@ void outputArrays(int bmGs[], int size1, int bmBc[], int size2) {
 
 }
 
-void build(char x[MATCHSIZE], char y[INPUTSIZE]) {
+void build(char x[MATCHSIZE]) {
    
 	int m = MATCHSIZE-1;
 	int n = INPUTSIZE-1;
@@ -93,7 +93,7 @@ void build(char x[MATCHSIZE], char y[INPUTSIZE]) {
 }
 
 int main() {
-	build(x, y);
+	build(x);
 }
 
 

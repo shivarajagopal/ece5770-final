@@ -11,8 +11,9 @@
 
 using namespace std;
 
+char y[INPUTSIZE];
 int BMsearch(char y[INPUTSIZE]) {
-   
+	int i, j;   
 	int m = MATCHSIZE-1;
 	int n = INPUTSIZE-1;
  
@@ -35,15 +36,19 @@ void dut(
 	hls::stream<char> &strm_in,
 	hls::stream<int> &strm_out		
 ) {	
-   char y[INPUTSIZE];
 	static int i=0;
 	int match_found=-1;
 	int j;
-	y[i++] = strm_in.read();
+	char inputChar = strm_in.read();
+	y[i++] = inputChar;
 	if (i < 255) {
 		match_found = -1;
 	} else {
-	  cout << "running BM..." << endl;
+	  for (j=0; j < 256 ; j++) {
+			printf("%c", y[j]);
+		}
+		printf("\n");
+		cout << "running BM..." << endl;
 		match_found = BMsearch(y);
 		i=0;
 	}
