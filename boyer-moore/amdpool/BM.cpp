@@ -1,15 +1,22 @@
 #include <stdio.h>
 #include <string.h>
-
-#define ASIZE 26
+#include <iostream>
+#include "BM.h"
+#define ASIZE 256
 
 #define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
 
 //char x[8]  = "GCAGAGAT";
 //char y[24] = "GCATCGCAGAGAGTATACAGTACG";
 
-char x[6] = "hello";
-char y[26] = "wooohelloarjyurtkngdssqnr";
+//char x[7] = "chello";
+//char y[26] = "woochelloarjyurtkngdssqnr";
+
+#define MATCHSIZE 10
+#define INPUTSIZE 256
+using namespace std;
+char x[MATCHSIZE] = "shellcode";
+char y[INPUTSIZE]= "aweihswshellcodebuilhvbseby76348oyweuyvl38ty w38yt 2938yv5239tw3rta37v awlrtavl237ifvwuig37lt523rywityr q.wylawearty;w3rtyW>Orqwo8ry qlwr8tyfweihtvblwi4ytw38lvty3ty238lvta3ilwvfgaw348lwvawileuvg aw3iltr23lvtgaw3ilvtfawilvftw3kftyweuivtyweift28lv8issdfe829";
 
 void preBmBc(char *x, int m, int bmBc[]) {
    int i;
@@ -40,7 +47,7 @@ void suffixes(char *x, int m, int *suff) {
 }
  
 void preBmGs(char *x, int m, int bmGs[]) {
-   int i, j, suff[5];
+   int i, j, suff[m];
  
    suffixes(x, m, suff);
  
@@ -56,8 +63,12 @@ void preBmGs(char *x, int m, int bmGs[]) {
       bmGs[m - 1 - suff[i]] = m - 1 - i;
 }
 
-int BM(char x[6], int m, char y[26], int n) {
-   int i, j, bmGs[5], bmBc[ASIZE];
+int BM(char x[MATCHSIZE], char y[INPUTSIZE]) {
+   
+	 int m = MATCHSIZE-1;
+	 int n = INPUTSIZE-1;
+
+	 int i, j, bmGs[m], bmBc[ASIZE];
  
    /* Preprocessing */
    preBmGs(x, m, bmGs);
@@ -75,11 +86,25 @@ int BM(char x[6], int m, char y[26], int n) {
       else
          j += MAX(bmGs[i], bmBc[y[i + j]] - m + 1 + i);
    }
+	 return -1;
 }
 
-int main() {
-   BM(x, strlen(x), y, strlen(y));
-   return 0;
+void dut(
+	hls::stream<char> &strm_in,
+	hls::stream<int> &strm_out		
+) {	
+	static int i=0;
+	int match_found=-1;
+	int j;
+	y[i++] = strm_in.read();
+	if (i < 255) {
+		match_found = -1;
+	} else {
+	  cout << "running BM..." << endl;
+		match_found = BM(x, y);
+		i=0;
+	}
+  strm_out.write( match_found );
 }
 
 

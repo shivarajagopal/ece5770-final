@@ -4,7 +4,7 @@
 # @brief: A Tcl script for synthesizing the baseline digit recongnition design.
 
 # Project name
-set hls_prj ac.prj
+set hls_prj bm.prj
 
 # Open/reset the project
 open_project ${hls_prj} -reset
@@ -13,8 +13,8 @@ open_project ${hls_prj} -reset
 set_top dut
 
 # Add design and testbench files
-add_files search.cpp
-add_files -tb ac_test.cpp
+add_files BM.cpp
+add_files -tb BM_test.cpp
 
 open_solution "solution1"
 # Use Zynq device
