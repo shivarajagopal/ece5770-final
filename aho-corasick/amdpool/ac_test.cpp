@@ -16,7 +16,6 @@ using namespace std;
 // Aho-Corasick testbench
 //------------------------------------------------------------------------
 hls::stream<char> ac_in;
-hls::stream<char> reset_in;
 hls::stream<int>  ac_out;
 
 std::string hex_to_string(const std::string& input)
@@ -48,12 +47,12 @@ void callSearch (char* array, int length) {
 	for (i = 0; i < length; i++) {
 		if (i == 0) {
 			ac_in.write(array[i]);
-			reset_in.write( 0x01 );
+			ac_in.write( 0x01 );
 		} else { 
 			ac_in.write(array[i]);
-			reset_in.write( 0x00 );
+			ac_in.write( 0x00 );
 		}
-		dut ( ac_in, reset_in, ac_out );
+		dut ( ac_in, ac_out );
 		matched = ac_out.read();
 		if (matched != -1) {
 			std::cout << "Recognized String "<< matched << std::endl;

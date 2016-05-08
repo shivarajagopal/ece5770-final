@@ -51,7 +51,6 @@ int ACsearch( char character, char reset ) { //char text[13], int textLength ) {
 
 void dut(
 		hls::stream<char> &strm_in,
-		hls::stream<char> &reset_in,
 		hls::stream<int> &strm_out
 )
 {
@@ -60,7 +59,7 @@ void dut(
 	int  match_found;
 	
 	in_char = strm_in.read();
-	reset = reset_in.read();
+	reset = strm_in.read();
 	//cout << "char: " << in_char << " reset: " << (int)reset << endl;
 
 	match_found = ACsearch(in_char, reset);
