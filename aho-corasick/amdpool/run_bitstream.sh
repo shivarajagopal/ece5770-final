@@ -25,13 +25,11 @@ LOGFILE="$WORKDIR/xillybus/vivado/xillydemo.runs/synth_1/runme.log"
 
 if [ ! -d $VERILOG_DIR ]; then
   printf "Cannot find directory $VERILOG_DIR, which holds the HLS generated Verilog.\n"
-  exit
 fi
 
 if [ ! -f $XILLYBUS_TAR ]; then
   printf "$XILLYBUS_TAR\n"
   printf "Cannot find FPGA wrapper directory! Make sure you are running on amdpool.\n"
-  exit
 fi
 
 #-----------------------------------------------------------------------
@@ -46,7 +44,6 @@ if [ ! -d $WORKDIR ]; then
   rm -f $WORKDIR.tar.gz
   if [ ! -d $WORKDIR ]; then
     printf "Error after extracting zedboard files.\n"
-    exit
   fi
 fi
 
