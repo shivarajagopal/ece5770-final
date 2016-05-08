@@ -41,7 +41,6 @@ if [ ! -d $WORKDIR ]; then
   printf "Copying zedboard files to current directory.\n"
   cp -r $XILLYBUS_TAR .
   tar -xzf $XILLYBUS_TAR
-  rm -f $WORKDIR.tar.gz
   if [ ! -d $WORKDIR ]; then
     printf "Error after extracting zedboard files.\n"
   fi
