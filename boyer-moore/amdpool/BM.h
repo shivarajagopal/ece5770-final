@@ -8,10 +8,11 @@
 
 #include<hls_stream.h>
 
-//int BM(char match[10], char test[256] );//* text, int textLength);
-
 void dut(
-  hls::stream<char> &strm_in,
+    hls::stream<char> &strm_in,
 	hls::stream<int>  &strm_out
 );
+
+
+
 #endif

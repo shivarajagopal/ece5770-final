@@ -2,17 +2,12 @@
 #include <string.h>
 #include <iostream>
 #include "BM.h"
+#include "terms.h"
 #define ASIZE 256
 
 #define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
 
-#define MATCHSIZE 10
-#define INPUTSIZE 256
 using namespace std;
-
-
-char x[MATCHSIZE] = "shellcode";
-char y[INPUTSIZE]= "aweihswshellcodebuilhvbseby76348oyweuyvl38ty w38yt 2938yv5239tw3rta37v awlrtavl237ifvwuig37lt523rywityr q.wylawearty;w3rtyW>Orqwo8ry qlwr8tyfweihtvblwi4ytw38lvty3ty238lvta3ilwvfgaw348lwvawileuvg aw3iltr23lvtgaw3ilvtfawilvftw3kftyweuivtyweift28lv8issdfe829";
 
 void preBmBc(char *x, int m, int bmBc[]) {
    int i;
@@ -59,48 +54,46 @@ void preBmGs(char *x, int m, int bmGs[]) {
       bmGs[m - 1 - suff[i]] = m - 1 - i;
 }
 
-int BM(char x[MATCHSIZE], char y[INPUTSIZE]) {
-   
-	 int m = MATCHSIZE-1;
-	 int n = INPUTSIZE-1;
+// Print out the 3 arrays necessary to a file.
+void outputArrays(int bmGs[], int size1, int bmBc[], int size2) {
+	// Open file
+	std::ofstream savefile("arrays.h");
 
-	 int i, j, bmGs[m], bmBc[ASIZE];
- 
-   /* Preprocessing */
-   preBmGs(x, m, bmGs);
-   preBmBc(x, m, bmBc);
- 
-   /* Searching */
-   j = 0;
-   while (j <= n - m) {
-      for (i = m - 1; i >= 0 && x[i] == y[i + j]; --i);
-      if (i < 0) {
-         printf("%d\n", j);
-         return j;
-         j += bmGs[0];
-      }
-      else
-         j += MAX(bmGs[i], bmBc[y[i + j]] - m + 1 + i);
-   }
-	 return -1;
+	// Output bmGs
+	savefile << "int bmGs[" << size1 << "] = {\n\t";
+    for (int i = 0; i < size1-1; i++) {
+        savefile << bmGs[i] << ", ";
+    }
+    savefile << bmGs[size1-1] << "\n};\n\n";
+
+    // Output bmBc
+	savefile << "int bmBc[" << size2 << "] = {\n\t";
+    for (int i = 0; i < size2-1; i++) {
+        savefile << bmBc[i] << ", ";
+    }
+    savefile << bmBc[size2-1] << "\n};\n\n";
+
+	// Close file
+    savefile.close();
+
 }
 
-void dut(
-	hls::stream<char> &strm_in,
-	hls::stream<int> &strm_out		
-) {	
-	static int i=0;
-	int match_found=-1;
-	int j;
-	y[i++] = strm_in.read();
-	if (i < 255) {
-		match_found = -1;
-	} else {
-	  cout << "running BM..." << endl;
-		match_found = BM(x, y);
-		i=0;
-	}
-  strm_out.write( match_found );
+void build(char x[MATCHSIZE], char y[INPUTSIZE]) {
+   
+	int m = MATCHSIZE-1;
+	int n = INPUTSIZE-1;
+
+	int i, j, bmGs[m], bmBc[ASIZE];
+ 
+   	/* Preprocessing */
+   	preBmGs(x, m, bmGs);
+   	preBmBc(x, m, bmBc);
+
+   	outputArrays(bmGs, m, bmBc, ASIZE);
+}
+
+int main() {
+	build(x, y);
 }
 
 
