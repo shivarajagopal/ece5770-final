@@ -71,7 +71,7 @@ ifstream file("../../snort/testStrings.txt");
 	}
 	ifstream hexFile("../../snort/testStringsHex.txt");
 	while(getline(hexFile, str)) {
-		cout << hex_to_string(str)) << endl;
+		cout << hex_to_string(str) << endl;
 	}  
 
   // Timer
@@ -80,13 +80,6 @@ ifstream file("../../snort/testStrings.txt");
 	
 	
 	callSearch(str4, str4.length());
-	/*
-	callSearch(str2, 13);
-	callSearch(str3, 13);
-	callSearch(str4, 15);
-	callSearch(str5, 36);
-	callSearch(str6, 13);
-  */
 	
 	timer.stop();
 

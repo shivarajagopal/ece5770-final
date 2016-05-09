@@ -11,6 +11,7 @@
 #include <stdexcept>
 #include "ac.h"
 #include "timer.h"
+#include "testStrings.h" 
 using namespace std;
 //------------------------------------------------------------------------
 // Aho-Corasick testbench
@@ -41,7 +42,7 @@ std::string hex_to_string(const std::string& input)
 	return output;
 }
 
-int callSearch (const string& array, int length) {
+inline int callSearch (const string& array, int length) {
 	int i;
 	int matched = -1;
 	for (i = 0; i < length; i++) {
@@ -93,16 +94,19 @@ int main(int argc, char *argv[])
 	ttimer.start();
 	cout << endl;
 	cout << "Begin full 64kB test..." << endl << endl;
-	
-	ifstream testFile1("../../snort/testMatchPacket1.txt");
+	ofstream outfile("testStrings.h");
+
+	ifstream testFile1("testMatchPacket1.txt");
 	int counter=0;
 	string tempStr;
 	str = "";
-	int totalTests=0;
 	matched = 0;
+	int totalTests=0;
+	/*
 	while(getline(testFile1, tempStr)) {
 		if (counter == 16) {
-		  retValue = callSearch(str, str.length());
+		  //retValue = callSearch(str, str.length());
+			outfile << "string match1" << totalTests << " = \"" << str << "\";\n\n";
 			if (retValue != -1) {
 				matched = 1;
 				break;
@@ -110,19 +114,18 @@ int main(int argc, char *argv[])
 			counter=0;
 			str = "";
 			totalTests++;
-			if (totalTests == 256) {
-				break;
-			}
 		} else {
 			str += tempStr;
 			counter++;
 		}
 	}
+	
 	if (!matched) cout << "No match found for this packet" <<endl;
+	*/
 
 
-	ifstream testFile2("../../snort/testMatchPacket2.txt");
-	counter = 0; str= ""; totalTests=0; matched=0;
+	ifstream testFile2("testMatchPacket2.txt");
+	counter = 0; str= ""; matched=0;
 	while(getline(testFile2, tempStr)) {
 		if (counter == 16) {
 			retValue = callSearch(str, str.length());
@@ -132,10 +135,6 @@ int main(int argc, char *argv[])
 			}
 			counter = 0;
 			str= "";
-			totalTests++;
-			if (totalTests == 256) {
-				break;
-			}
 		} else {
 			str += tempStr;
 			counter++;
@@ -143,8 +142,8 @@ int main(int argc, char *argv[])
 	}
   if (!matched) cout << "No match found for this packet" <<endl;
 
-	ifstream testFile3("../../snort/testCleanPacket.txt");
-	counter = 0; str= ""; totalTests=0; matched=0;
+	ifstream testFile3("testCleanPacket.txt");
+	counter = 0; str= ""; matched=0;
 	while(getline(testFile3, tempStr)) {
 		if (counter == 16) {
 			retValue = callSearch(str, str.length());
@@ -154,10 +153,6 @@ int main(int argc, char *argv[])
 			}
 			counter = 0;
 			str= "";
-			totalTests++;
-			if (totalTests == 256) {
-				break;
-			}
 		} else {
 			str += tempStr;
 			counter++;
