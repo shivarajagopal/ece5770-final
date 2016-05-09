@@ -41,7 +41,7 @@ std::string hex_to_string(const std::string& input)
 	return output;
 }
 
-void callSearch (char* array, int length) {
+void callSearch (const string& array, int length) {
 	int i;
 	int matched = -1;
 	for (i = 0; i < length; i++) {
@@ -56,10 +56,11 @@ void callSearch (char* array, int length) {
 		matched = ac_out.read();
 		if (matched != -1) {
 			std::cout << "Recognized String "<< matched << std::endl;
+			matched = 1;
 			break;
 		}
 	}
-	std::cout << "No matches found!!" << std::endl;
+	if (matched != 1) 	std::cout << "No matches found!!" << std::endl;
 
 }
 
@@ -67,24 +68,23 @@ void callSearch (char* array, int length) {
 int main(int argc, char *argv[]) 
 {
   int matched, i;
-	
-	char str1[13] = "asdkweoijloh";
-	char str2[13] = "hesdlfjasklj";
-	char str3[13] = "sheksladjfkl";
-	char str4[15] = "asefjshellcode";
-	char str5[36] = "RERERERERERERERERERERERERERERERERas";
-	char str6[13] = {0x6B, 0x3C, 0x24, 0x0B, 0x60, 0x03, 0x0C, 0x24, 0x6A, 0x65, 0x87, 0x12, '\0'};
+	string str1 = "asdkweoijloh";
+	string str2 = "hesdlfjasklj";
+	string str3 = "sheksladjfkl";
+	string str4 = "asefjshellcode";
+	string str5 = "RERERERERERERERERERERERERERERERERas";
+	string str6 = hex_to_string("6B3C240B60030C246A658712");
   // Timer
   Timer timer("aho-corasick");
   timer.start();
 	
 	
-	callSearch(str1, 13);
-	callSearch(str2, 13);
-	callSearch(str3, 13);
-	callSearch(str4, 15);
-	callSearch(str5, 36);
-	callSearch(str6, 13);
+	callSearch(str1, str1.length());
+	callSearch(str2, str2.length());
+	callSearch(str3, str3.length());
+	callSearch(str4, str4.length());
+	callSearch(str5, str5.length());
+	callSearch(str6, str6.length());
   
 	
 	timer.stop();

@@ -41,7 +41,7 @@ std::string hex_to_string(const std::string& input)
 	return output;
 }
 
-void callSearch (char* array, int length) {
+void callSearch (const string& array, int length) {
 	int i;
 	int matched = -1;
 	for (i = 0; i < length; i++) {
@@ -63,18 +63,13 @@ int main(int argc, char *argv[])
 {
   int matched, i;
 	
-//	char str1[13] = "asdkweoijloh";
-//	char str2[13] = "hesdlfjasklj";
-//	char str3[13] = "sheksladjfkl";
-char str4[256] = "iywefbevhliweybfvioweyblvyewvfileyvseorigybeioybgwebtyweuietyshellcodeyvweoyvawlo=asweiawebiotywe;obtysweovbtyebtyawlytaw348lobtyebysweybwerioy bweoty bweoivbtyeiovbtyweiobyweivbtyawleybt aweiuvtybweiotyvbaweioyvbtweiortyvbwevbweybttyweyvbtwtyvbwybytytigt";
-//	char str5[36] = "RERERERERERERERERERERERERERERERERas";
-//	char str6[13] = {0x6B, 0x3C, 0x24, 0x0B, 0x60, 0x03, 0x0C, 0x24, 0x6A, 0x65, 0x87, 0x12, '\0'};
+string str4 = "iywefbevhliweybfvioweyblvyewvfileyvseorigybeioybgwebtyweuietyshellcodeyvweoyvawlo=asweiawebiotywe;obtysweovbtyebtyawlytaw348lobtyebysweybwerioy bweoty bweoivbtyeiovbtyweiobyweivbtyawleybt aweiuvtybweiotyvbaweioyvbtweiortyvbwevbweybttyweyvbtwtyvbwybytytigit";
   // Timer
   Timer timer("boyer-moore");
   timer.start();
 	
 	
-	callSearch(str4, 255);
+	callSearch(str4, str4.length());
 	/*
 	callSearch(str2, 13);
 	callSearch(str3, 13);

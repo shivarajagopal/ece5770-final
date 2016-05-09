@@ -40,7 +40,7 @@ void dut(
 	int j;
 	char inputChar = strm_in.read();
 	y[i++] = inputChar;
-	if (i < 255) {
+	if (i < 256) {
 		match_found = -1;
 	} else {
 		cout << "running BM..." << endl;
