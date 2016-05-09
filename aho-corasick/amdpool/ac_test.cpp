@@ -41,7 +41,7 @@ std::string hex_to_string(const std::string& input)
 	return output;
 }
 
-void callSearch (const string& array, int length) {
+int callSearch (const string& array, int length) {
 	int i;
 	int matched = -1;
 	for (i = 0; i < length; i++) {
@@ -57,10 +57,10 @@ void callSearch (const string& array, int length) {
 		if (matched != -1) {
 			std::cout << "Recognized String "<< matched << std::endl;
 			matched = 1;
-			break;
+			return matched;
 		}
 	}
-	if (matched != 1) 	std::cout << "No matches found!!" << std::endl;
+	if (matched != 1) return -1;
 
 }
 
@@ -71,17 +71,18 @@ int main(int argc, char *argv[])
 	  // Timer
   Timer vtimer("aho-corasick verification");
 	Timer ttimer("aho-corasick tests");
+	string str;
+	int retValue;
   vtimer.start();
   
 	cout << "Verifying known matches..." << endl;
 	ifstream file("../../snort/verifStrings.txt");
-	string str;
-	cout << "Expect Recognition for these tests..." << endl;
+	cout << "Expect Recognition for these tests..." << endl << endl;
 	while(getline(file, str)) {
 		callSearch(str, str.length());
 	}
-
-	cout << "Expect recognition for these hex tests..." << endl;
+	cout << endl;
+	cout << "Expect recognition for these hex tests..." << endl << endl;
 	ifstream hexFile("../../snort/verifStringsHex.txt");
 	while(getline(hexFile, str)) {
 		string conv = hex_to_string(str);
@@ -90,23 +91,82 @@ int main(int argc, char *argv[])
 	vtimer.stop();
 	
 	ttimer.start();
+	cout << endl;
+	cout << "Begin full 64kB test..." << endl << endl;
 	
-	cout << "Begin full 64kB test..." << endl;
-	ifstream testFile("../../snort/testMatchPacket1.txt");
-	while(getline(testFile, str)) {
-		callSearch(str, str.length());
+	ifstream testFile1("../../snort/testMatchPacket1.txt");
+	int counter=0;
+	string tempStr;
+	str = "";
+	int totalTests=0;
+	matched = 0;
+	while(getline(testFile1, tempStr)) {
+		if (counter == 16) {
+		  retValue = callSearch(str, str.length());
+			if (retValue != -1) {
+				matched = 1;
+				break;
+			}
+			counter=0;
+			str = "";
+			totalTests++;
+			if (totalTests == 256) {
+				break;
+			}
+		} else {
+			str += tempStr;
+			counter++;
+		}
 	}
+	if (!matched) cout << "No match found for this packet" <<endl;
+
 
 	ifstream testFile2("../../snort/testMatchPacket2.txt");
-	while(getline(testFile2, str)) {
-		callSearch(str, str.length());
+	counter = 0; str= ""; totalTests=0; matched=0;
+	while(getline(testFile2, tempStr)) {
+		if (counter == 16) {
+			retValue = callSearch(str, str.length());
+			if (retValue != -1) {
+				matched = 1;
+				break;
+			}
+			counter = 0;
+			str= "";
+			totalTests++;
+			if (totalTests == 256) {
+				break;
+			}
+		} else {
+			str += tempStr;
+			counter++;
+		}
 	}
+  if (!matched) cout << "No match found for this packet" <<endl;
 
 	ifstream testFile3("../../snort/testCleanPacket.txt");
-	while(getline(testFile2, str)) {
-		callSearch(str, str.length());
+	counter = 0; str= ""; totalTests=0; matched=0;
+	while(getline(testFile3, tempStr)) {
+		if (counter == 16) {
+			retValue = callSearch(str, str.length());
+			if (retValue != -1) {
+				matched = 1;
+				break;
+			}
+			counter = 0;
+			str= "";
+			totalTests++;
+			if (totalTests == 256) {
+				break;
+			}
+		} else {
+			str += tempStr;
+			counter++;
+		}
 	}
-	
+  if (!matched) cout << "No match found for this packet" <<endl;
+
+	cout << endl;
+
 	ttimer.stop();
 
 
