@@ -11,7 +11,7 @@
 #include <stdexcept>
 #include "ac.h"
 #include "timer.h"
-#include "testStrings.h" 
+//#include "testStrings.h" 
 using namespace std;
 //------------------------------------------------------------------------
 // Aho-Corasick testbench
@@ -95,70 +95,62 @@ int main(int argc, char *argv[])
 	cout << endl;
 	cout << "Begin full 64kB test..." << endl << endl;
 	ofstream outfile("testStrings.h");
-
-	ifstream testFile1("testMatchPacket1.txt");
-	int counter=0;
+	int counter;
 	string tempStr;
-	str = "";
-	matched = 0;
-	int totalTests=0;
-	/*
-	while(getline(testFile1, tempStr)) {
-		if (counter == 16) {
-		  //retValue = callSearch(str, str.length());
-			outfile << "string match1" << totalTests << " = \"" << str << "\";\n\n";
-			if (retValue != -1) {
-				matched = 1;
-				break;
-			}
-			counter=0;
-			str = "";
-			totalTests++;
-		} else {
+	
+	ifstream testFile1("testMatchPacket1.txt");
+	counter=0; str = ""; matched = 0;
+
+	for (int k = 0; k < 256; k++) {	
+		for (int l = 0; l < 16; l++) {
+			getline(testFile1, tempStr);
 			str += tempStr;
 			counter++;
 		}
+		retValue = callSearch(str, str.length());
+		if (retValue != -1) {
+			matched= 1;
+		}
+		counter = 0;
+		str = "";
 	}
-	
 	if (!matched) cout << "No match found for this packet" <<endl;
-	*/
-
 
 	ifstream testFile2("testMatchPacket2.txt");
-	counter = 0; str= ""; matched=0;
-	while(getline(testFile2, tempStr)) {
-		if (counter == 16) {
-			retValue = callSearch(str, str.length());
-			if (retValue != -1) {
-				matched = 1;
-				break;
-			}
-			counter = 0;
-			str= "";
-		} else {
+	counter=0; str = ""; matched = 0;
+
+	for (int k = 0; k < 256; k++) {	
+		for (int l = 0; l < 16; l++) {
+			getline(testFile2, tempStr);
 			str += tempStr;
 			counter++;
 		}
+		retValue = callSearch(str, str.length());
+		if (retValue != -1) {
+			matched= 1;
+		}
+		counter = 0;
+		str = "";
 	}
-  if (!matched) cout << "No match found for this packet" <<endl;
+	if (!matched) cout << "No match found for this packet" <<endl;
 
 	ifstream testFile3("testCleanPacket.txt");
-	counter = 0; str= ""; matched=0;
-	while(getline(testFile3, tempStr)) {
-		if (counter == 16) {
-			retValue = callSearch(str, str.length());
-			if (retValue != -1) {
-				matched = 1;
-				break;
-			}
-			counter = 0;
-			str= "";
-		} else {
+	counter=0; str = ""; matched = 0;
+
+	for (int k = 0; k < 256; k++) {	
+		for (int l = 0; l < 16; l++) {
+			getline(testFile3, tempStr);
 			str += tempStr;
 			counter++;
 		}
+		retValue = callSearch(str, str.length());
+		if (retValue != -1) {
+			matched= 1;
+		}
+		counter = 0;
+		str = "";
 	}
-  if (!matched) cout << "No match found for this packet" <<endl;
+	if (!matched) cout << "No match found for this packet" <<endl;
 
 	cout << endl;
 
