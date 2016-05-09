@@ -94,7 +94,6 @@ int main(int argc, char *argv[])
 	ttimer.start();
 	cout << endl;
 	cout << "Begin full 64kB test..." << endl << endl;
-	ofstream outfile("testStrings.h");
 	int counter;
 	string tempStr;
 	
