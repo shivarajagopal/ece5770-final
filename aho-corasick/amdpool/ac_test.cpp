@@ -74,6 +74,15 @@ int main(int argc, char *argv[])
 	string str4 = "asefjshellcode";
 	string str5 = "RERERERERERERERERERERERERERERERERas";
 	string str6 = hex_to_string("6B3C240B60030C246A658712");
+	ifstream file("../../snort/testStrings.txt");
+	string str;
+	while(getline(file, str)) {
+		cout << str << endl;
+	}
+	ifstream hexFile("../../snort/testStringsHex.txt");
+	while(getline(hexFile, str)) {
+		cout << hex_to_string(str)) << endl;
+	}
   // Timer
   Timer timer("aho-corasick");
   timer.start();

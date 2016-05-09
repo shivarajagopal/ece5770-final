@@ -64,6 +64,16 @@ int main(int argc, char *argv[])
   int matched, i;
 	
 string str4 = "iywefbevhliweybfvioweyblvyewvfileyvseorigybeioybgwebtyweuietyshellcodeyvweoyvawlo=asweiawebiotywe;obtysweovbtyebtyawlytaw348lobtyebysweybwerioy bweoty bweoivbtyeiovbtyweiobyweivbtyawleybt aweiuvtybweiotyvbaweioyvbtweiortyvbwevbweybttyweyvbtwtyvbwybytytigit";
+ifstream file("../../snort/testStrings.txt");
+	string str;
+	while(getline(file, str)) {
+		cout << str << endl;
+	}
+	ifstream hexFile("../../snort/testStringsHex.txt");
+	while(getline(hexFile, str)) {
+		cout << hex_to_string(str)) << endl;
+	}  
+
   // Timer
   Timer timer("boyer-moore");
   timer.start();
