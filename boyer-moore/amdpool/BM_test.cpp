@@ -114,7 +114,7 @@ string str4 = "iywefbevhliweybfvioweyblvyewvfileOleaut32ybeioybgwebtyweuietyshel
 	int counter;
 	string tempStr;
 	
-	ifstream testFile1("../../snort/testMatchPacket1.txt");
+	ifstream testFile1("testMatchPacket1.txt");
 	counter=0; str = ""; matched = 0;
 
 	for (int k = 0; k < 256; k++) {	
@@ -136,7 +136,7 @@ string str4 = "iywefbevhliweybfvioweyblvyewvfileOleaut32ybeioybgwebtyweuietyshel
 		cout << "Matched at location " << matched << endl;
 	}
 
-	ifstream testFile2("../../snort/testMatchPacket2.txt");
+	ifstream testFile2("testMatchPacket2.txt");
 	counter=0; str = ""; matched = 0;
 
 	for (int k = 0; k < 256; k++) {	
@@ -154,7 +154,7 @@ string str4 = "iywefbevhliweybfvioweyblvyewvfileOleaut32ybeioybgwebtyweuietyshel
 	}
 	if (!matched) cout << "No match found for this packet" <<endl;
 
-	ifstream testFile3("../../snort/testCleanPacket.txt");
+	ifstream testFile3("testCleanPacket.txt");
 	counter=0; str = ""; matched = 0;
 
 	for (int k = 0; k < 256; k++) {	
