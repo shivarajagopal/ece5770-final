@@ -68,35 +68,47 @@ void callSearch (const string& array, int length) {
 int main(int argc, char *argv[]) 
 {
   int matched, i;
-	string str1 = "asdkweoijloh";
-	string str2 = "hesdlfjasklj";
-	string str3 = "sheksladjfkl";
-	string str4 = "asefjshellcode";
-	string str5 = "RERERERERERERERERERERERERERERERERas";
-	string str6 = hex_to_string("6B3C240B60030C246A658712");
-	ifstream file("../../snort/testStrings.txt");
-	string str;
-	while(getline(file, str)) {
-		cout << str << endl;
-	}
-	ifstream hexFile("../../snort/testStringsHex.txt");
-	while(getline(hexFile, str)) {
-		cout << hex_to_string(str)) << endl;
-	}
-  // Timer
-  Timer timer("aho-corasick");
-  timer.start();
-	
-	
-	callSearch(str1, str1.length());
-	callSearch(str2, str2.length());
-	callSearch(str3, str3.length());
-	callSearch(str4, str4.length());
-	callSearch(str5, str5.length());
-	callSearch(str6, str6.length());
+	  // Timer
+  Timer vtimer("aho-corasick verification");
+	Timer ttimer("aho-corasick tests");
+  vtimer.start();
   
+	cout << "Verifying known matches..." << endl;
+	ifstream file("../../snort/verifStrings.txt");
+	string str;
+	cout << "Expect Recognition for these tests..." << endl;
+	while(getline(file, str)) {
+		callSearch(str, str.length());
+	}
+
+	cout << "Expect recognition for these hex tests..." << endl;
+	ifstream hexFile("../../snort/verifStringsHex.txt");
+	while(getline(hexFile, str)) {
+		string conv = hex_to_string(str);
+		callSearch(conv, conv.length());
+	}	
+	vtimer.stop();
 	
-	timer.stop();
+	ttimer.start();
+	
+	cout << "Begin full 64kB test..." << endl;
+	ifstream testFile("../../snort/testMatchPacket1.txt");
+	while(getline(testFile, str)) {
+		callSearch(str, str.length());
+	}
+
+	ifstream testFile2("../../snort/testMatchPacket2.txt");
+	while(getline(testFile2, str)) {
+		callSearch(str, str.length());
+	}
+
+	ifstream testFile3("../../snort/testCleanPacket.txt");
+	while(getline(testFile2, str)) {
+		callSearch(str, str.length());
+	}
+	
+	ttimer.stop();
+
 
   return 0;
 }
