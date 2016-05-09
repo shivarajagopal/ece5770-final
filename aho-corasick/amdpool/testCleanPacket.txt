@@ -1,1 +1,1 @@
-../../snort/testCleanPacket2.txt
+../../snort/testCleanPacket.txt
