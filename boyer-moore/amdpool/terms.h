@@ -1,4 +1,4 @@
-#define MATCHSIZE 10
+#define MATCHSIZE 9
 #define INPUTSIZE 256
 
-char x[MATCHSIZE] = "shellcode";
+char x[MATCHSIZE] = "Oleaut32";

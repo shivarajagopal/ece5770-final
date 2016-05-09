@@ -13,22 +13,34 @@ using namespace std;
 
 char y[INPUTSIZE];
 int BMsearch(char y[INPUTSIZE]) {
-	int i, j;   
-	int m = MATCHSIZE-1;
-	int n = INPUTSIZE-1;
- 
+	 int i, j, k, l;   
+	 int m = MATCHSIZE-1;
+	 int n = INPUTSIZE-1;
+	 int matched, matchedj;
    /* Searching */
    j = 0;
-   while (j <= n - m) {
-      for (i = m - 1; i >= 0 && x[i] == y[i + j]; --i);
-      if (i < 0) {
-         return j;
-         j += bmGs[0];
-      }
-      else
-         j += MAX(bmGs[i], bmBc[y[i + j]] - m + 1 + i);
+	 int iter = 0;
+	 matchedj = -1;
+	 matched = 0;
+   for (iter=0; iter < n-m; iter++) {
+	   if (j <= n-m && (!matched)) {
+				i = m-1;
+				for (l = 0 ; l < m ; l++) {
+					if ((x[i] == y[i+j]) && (i >= 0)) {
+						i--;
+					}
+				}
+				if (i < 0) {
+					matched = 1;
+					matchedj = j;
+					j += bmGs[0];
+				}
+				else {
+					j += MAX(bmGs[i], bmBc[y[i + j]] - m + 1 + i);
+				}
+		 }
    }
-	 return -1;
+	 return matchedj;
 }
 
 void dut(
@@ -43,7 +55,7 @@ void dut(
 	if (i < 256) {
 		match_found = -1;
 	} else {
-		cout << "running BM..." << endl;
+		//cout << "running BM..." << endl;
 		match_found = BMsearch(y);
 		i=0;
 	}
