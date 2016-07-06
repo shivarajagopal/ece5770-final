@@ -1,5 +1,5 @@
 # ece5770-final
-A project to compare HLS-synthesized versions of string matching algorithms
+A project to compare HLS-synthesized versions of string matching algorithms. Created by [wg79](https://github.com/wg79/) and [shivarajagopal](https://github.com/shivarajagopal/)
 
 ## Overview
 The project contains C++ implementations of the Boyer-Moore single-string matching algorithm and the Aho-Corasick multi-string matching algorithm. The code is written for synthesis using Xilinx Vivado HLS, and contains many HLS-based optimizations, including static memory allocation.
